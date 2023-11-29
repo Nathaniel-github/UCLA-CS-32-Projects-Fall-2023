@@ -1,0 +1,308 @@
+Nathaniel Thomas 506164479
+
+I think the only notable part of this program is the evaluateHand method and I definitely struggled
+with how to design it. I began by writing out if statements that blocked certain parts of the
+strategy card (e.x. if (handSum >= 13 && handSum <=17 && dVal >= 2 && dVal <= 6)) but then thought
+that it looked way too messy and would be a pain in the butt to debug if there were issues. Although
+I still felt that the if statements were the shortest way to go about coding a solution to this
+problem I decided to go with the 2D array option even though it was more tedious it was a faster
+solution and cleaner overall.
+
+    // test code for Card to make sure its methods are likely working
+    
+    Card c( Suit::CLUBS, Face::DEUCE );
+    assert( c.getSuit() == Suit::CLUBS );
+    assert( c.getFace() == Face::DEUCE );
+    assert( c.getValue( ) == 2 );
+    
+    Card d( Suit::SPADES, Face::QUEEN );
+    assert( d.getSuit() == Suit::SPADES );
+    assert( d.getFace() == Face::QUEEN );
+    assert( d.getValue( ) == 10 );
+    
+    // test code for Hand to make sure its initialization and methods work as intended
+    
+    Card ace( Suit::CLUBS, Face::ACE );
+    Card two( Suit::HEARTS, Face::DEUCE );
+    Card three( Suit::DIAMONDS, Face::THREE );
+    Card four( Suit::SPADES, Face::FOUR );
+    Card five( Suit::CLUBS, Face::FIVE );
+    Card six( Suit::HEARTS, Face::SIX );
+    Card seven( Suit::DIAMONDS, Face::SEVEN );
+    Card eight( Suit::SPADES, Face::EIGHT );
+    Card nine( Suit::CLUBS, Face::NINE );
+    Card ten( Suit::HEARTS, Face::TEN );
+    Card jack( Suit::DIAMONDS, Face::JACK );
+    Card queen( Suit::CLUBS, Face::QUEEN );
+    Card king( Suit::SPADES, Face::KING );
+    assert( ace.getValue( ) == 1 );
+    assert( two.getValue( ) == 2 );
+    assert( three.getValue( ) == 3 );
+    assert( four.getValue( ) == 4 );
+    assert( five.getValue( ) == 5 );
+    assert( six.getValue( ) == 6 );
+    assert( seven.getValue( ) == 7 );
+    assert( eight.getValue( ) == 8 );
+    assert( nine.getValue( ) == 9 );
+    assert( ten.getValue( ) == 10 );
+    assert( jack.getValue( ) == 10 );
+    assert( queen.getValue( ) == 10 );
+    assert( king.getValue( ) == 10 );
+    
+    // Test evaluating hand for a sum of 12 without aces or pairs
+    Hand h( c, d );
+    assert( h.evaluateHand(two) == Choice::HIT );
+    assert( h.evaluateHand(three) == Choice::HIT );
+    assert( h.evaluateHand(four) == Choice::STAND );
+    assert( h.evaluateHand(five) == Choice::STAND );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand(queen, king);
+    // Make sure that even though the values are equal its technically not a pair
+    assert(h.isPair() == false);
+    
+    // Testing a bunch of different normal sums that don't contain aces or pairs
+    
+    h = Hand( six, two );
+    assert( h.evaluateHand(five) == Choice::HIT );
+    assert( h.evaluateHand(six) == Choice::HIT );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( six, three );
+    assert( h.evaluateHand(five) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(six) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( six, four );
+    assert( h.evaluateHand(five) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(six) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(seven) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(eight) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(nine) == Choice::DOUBLEHIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( six, five );
+    assert( h.evaluateHand(five) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(six) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(seven) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(eight) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(nine) == Choice::DOUBLEHIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( six, seven );
+    assert( h.evaluateHand(five) == Choice::STAND );
+    assert( h.evaluateHand(six) == Choice::STAND );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( six, eight );
+    assert( h.evaluateHand(five) == Choice::STAND );
+    assert( h.evaluateHand(six) == Choice::STAND );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( six, nine );
+    assert( h.evaluateHand(five) == Choice::STAND );
+    assert( h.evaluateHand(six) == Choice::STAND );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( six, ten );
+    assert( h.evaluateHand(five) == Choice::STAND );
+    assert( h.evaluateHand(six) == Choice::STAND );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::SURRENDERHIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( seven, ten );
+    assert( h.evaluateHand(five) == Choice::STAND );
+    assert( h.evaluateHand(six) == Choice::STAND );
+    assert( h.evaluateHand(seven) == Choice::STAND );
+    assert( h.evaluateHand(eight) == Choice::STAND );
+    assert( h.evaluateHand(nine) == Choice::STAND );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == false );
+    
+    // Testing all the ace hands
+    
+    h = Hand( ace, two );
+    assert( h.evaluateHand(five) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(six) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == true );
+    
+    h = Hand( ace, three );
+    assert( h.evaluateHand(five) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(six) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == true );
+    
+    h = Hand( ace, four );
+    assert( h.evaluateHand(five) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(six) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == true );
+    
+    h = Hand( ace, five );
+    assert( h.evaluateHand(five) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(six) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == true );
+    
+    h = Hand( ace, six );
+    assert( h.evaluateHand(five) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(six) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(seven) == Choice::HIT );
+    assert( h.evaluateHand(eight) == Choice::HIT );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == true );
+    
+    h = Hand( ace, seven );
+    assert( h.evaluateHand(five) == Choice::DOUBLESTAND );
+    assert( h.evaluateHand(six) == Choice::DOUBLESTAND );
+    assert( h.evaluateHand(seven) == Choice::STAND );
+    assert( h.evaluateHand(eight) == Choice::STAND );
+    assert( h.evaluateHand(nine) == Choice::HIT );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == true );
+    
+    h = Hand( ace, eight );
+    assert( h.evaluateHand(five) == Choice::STAND );
+    assert( h.evaluateHand(six) == Choice::STAND );
+    assert( h.evaluateHand(seven) == Choice::STAND );
+    assert( h.evaluateHand(eight) == Choice::STAND );
+    assert( h.evaluateHand(nine) == Choice::STAND );
+    assert( h.isPair( ) == false );
+    assert( h.isSoft( ) == true );
+    
+    // Testing all the pair hands
+    
+    h = Hand( ace, ace );
+    assert( h.evaluateHand(two) == Choice::SPLIT );
+    assert( h.evaluateHand(three) == Choice::SPLIT );
+    assert( h.evaluateHand(four) == Choice::SPLIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == true );
+    
+    h = Hand( two, two );
+    assert( h.evaluateHand(two) == Choice::SPLITHIT );
+    assert( h.evaluateHand(three) == Choice::SPLITHIT );
+    assert( h.evaluateHand(four) == Choice::SPLIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( three, three );
+    assert( h.evaluateHand(two) == Choice::SPLITHIT );
+    assert( h.evaluateHand(three) == Choice::SPLITHIT );
+    assert( h.evaluateHand(four) == Choice::SPLIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( four, four );
+    assert( h.evaluateHand(two) == Choice::HIT );
+    assert( h.evaluateHand(three) == Choice::HIT );
+    assert( h.evaluateHand(four) == Choice::HIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( five, five );
+    assert( h.evaluateHand(two) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(three) == Choice::DOUBLEHIT );
+    assert( h.evaluateHand(four) == Choice::DOUBLEHIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( six, six );
+    assert( h.evaluateHand(two) == Choice::SPLITHIT );
+    assert( h.evaluateHand(three) == Choice::SPLIT );
+    assert( h.evaluateHand(four) == Choice::SPLIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( seven, seven );
+    assert( h.evaluateHand(two) == Choice::SPLIT );
+    assert( h.evaluateHand(three) == Choice::SPLIT );
+    assert( h.evaluateHand(four) == Choice::SPLIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( eight, eight );
+    assert( h.evaluateHand(two) == Choice::SPLIT );
+    assert( h.evaluateHand(three) == Choice::SPLIT );
+    assert( h.evaluateHand(four) == Choice::SPLIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( nine, nine );
+    assert( h.evaluateHand(two) == Choice::SPLIT );
+    assert( h.evaluateHand(three) == Choice::SPLIT );
+    assert( h.evaluateHand(four) == Choice::SPLIT );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( ten, ten );
+    assert( h.evaluateHand(two) == Choice::STAND );
+    assert( h.evaluateHand(three) == Choice::STAND );
+    assert( h.evaluateHand(four) == Choice::STAND );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( jack, jack );
+    assert( h.evaluateHand(two) == Choice::STAND );
+    assert( h.evaluateHand(three) == Choice::STAND );
+    assert( h.evaluateHand(four) == Choice::STAND );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( queen, queen );
+    assert( h.evaluateHand(two) == Choice::STAND );
+    assert( h.evaluateHand(three) == Choice::STAND );
+    assert( h.evaluateHand(four) == Choice::STAND );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+    
+    h = Hand( king, king );
+    assert( h.evaluateHand(two) == Choice::STAND );
+    assert( h.evaluateHand(three) == Choice::STAND );
+    assert( h.evaluateHand(four) == Choice::STAND );
+    assert( h.isPair( ) == true );
+    assert( h.isSoft( ) == false );
+
+My code works for all of these test cases. I included every possible type of player hand to test but didn't include
+every single possible combination of those player hands with dealer cards. Doing that would simply be far too time
+consuming and likely serve no purpose as these tests cover a solid majority of possible strategies. 

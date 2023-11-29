@@ -1,0 +1,107 @@
+Nathaniel Thomas 506164479
+
+This was the first somewhat complex programming project we have had this year and I enjoyed its usage of things slightly
+outside the scope of this class such as file reading but not too complex such that we are completely unable to understand
+it. The first obstacle I had to overcome while doing this project was probably understanding the instructions themselves.
+They were extremely unclear in certain areas especially with regards to the inheritance and CSV methods. However, past
+that initial confusion I think this lab was once again less challenging that I feel like it could have been. I am taking
+a look at projects from last year and they seem much more rigorous and I am afraid they are the prerequisite for CS 180
+and we won't be prepared taking this class.
+
+    Passenger passenger2;
+    passenger2.setName("Rose DeWitt Bukater");
+    passenger2.setEmbarcation("C");
+    passenger2.setClass("1");
+    passenger2.setSurvived("1");
+    passenger2.setFare("100.00");
+    assert(passenger2.getName() == "Rose DeWitt Bukater");
+    assert(passenger2.getClass() == Class::FIRST);
+    assert(passenger2.getEmbarcation() == Embarcation::CHERBOURG);
+    assert(std::to_string(passenger2.getFare()) == "100.000000");
+    assert(passenger2.getSurvived() == true);
+    // assert that all values of the assigned passenger were stored correctly
+
+    OutputTableRow row2;
+    row2.setDescription("additional testing");
+    row2.setSurvived(8);
+    row2.setTotal(12);
+    assert(row2.getDescription() == "additional testing");
+    assert(row2.getSurvived() == 8);
+    assert(row2.getTotal() == 12);
+    assert(std::to_string(row2.getPercentage()) == "0.666667");
+    // test methods directly from outputtablerow
+
+    PassengerDatabase emptyDatabase;
+    assert(!emptyDatabase.loaded());  // Database should not be loaded initially.
+
+    // Test loading a different dataset.
+    PassengerDatabase anotherDatabase;
+    anotherDatabase.load(PATH_TO_MOVIE_DATA_MAC);
+    assert(anotherDatabase.loaded());
+
+    // Test getting a passenger by a name that doesn't exist.
+    Passenger *nonExistentPassenger = anotherDatabase.getPassenger_byName("Nonexistent");
+    assert(nonExistentPassenger == nullptr);
+
+    // Test creating an empty output table.
+    vector<Passenger *> emptyPassengerList;
+    PassengerOutputTable emptyTable(emptyPassengerList);
+    assert(emptyTable.rowCount() == 0);
+
+    // Test setting and getting a different output field.
+    emptyTable.setOutputField(Field::BYEMBARCATION);
+    assert(emptyTable.getOutputField() == Field::BYEMBARCATION);
+
+    // Test displaying an empty table.
+    emptyTable.setDescription("Empty Table");
+    emptyTable.display();
+
+    // Attempt to get passengers from an empty database.
+    vector<Passenger *> emptyPassengers = emptyDatabase.getPassengers();
+    assert(emptyPassengers.empty());
+
+    // Attempt to get passengers by class from an empty database.
+    vector<Passenger *> emptyClassPassengers = emptyDatabase.getPassengers_byClass(Class::SECOND, true, 0.00);
+    assert(emptyClassPassengers.empty());
+
+    // Test setting invalid values for Passenger attributes.
+    Passenger invalidPassenger;
+    invalidPassenger.setName("");
+    invalidPassenger.setEmbarcation("X");  // Invalid Embarkation code
+    invalidPassenger.setClass("4");        // Invalid Passenger class
+    invalidPassenger.setSurvived("2");     // Invalid Survived value
+    invalidPassenger.setFare("-5.00");      // Invalid Fare value
+
+    // Ensure that the default values are set for invalid inputs.
+    assert(invalidPassenger.getName() == "");
+    assert(invalidPassenger.getEmbarcation() == Embarcation::NOTKNOWN);
+    assert(invalidPassenger.getClass() == Class::NOTKNOWN);
+    assert(invalidPassenger.getSurvived() == false);
+    assert(invalidPassenger.getFare() == -5);
+
+    // Test with passengers on the boundary of survival.
+    Passenger boundaryPassenger;
+    boundaryPassenger.setSurvived("1");  // Survived
+    boundaryPassenger.setFare("0.00");   // Minimum Fare
+    assert(boundaryPassenger.getSurvived() == true);
+    assert(std::to_string(boundaryPassenger.getFare()) == "0.000000");
+
+    // Test with passengers on the boundary of non-survival.
+    Passenger nonSurvivalBoundaryPassenger;
+    nonSurvivalBoundaryPassenger.setSurvived("0");  // Did not survive
+    nonSurvivalBoundaryPassenger.setFare("999999");  // Maximum Fare
+    assert(nonSurvivalBoundaryPassenger.getSurvived() == false);
+    assert(nonSurvivalBoundaryPassenger.getFare() == 999999);
+
+    // Test with a large dataset.
+    PassengerDatabase largeDatabase;
+    largeDatabase.load(PATH_TO_BIGGER_DATA_MAC);
+    assert(largeDatabase.loaded());
+
+    // Ensure the correct number of passengers is loaded.
+    vector<Passenger *> largePassengers = largeDatabase.getPassengers();
+    assert(largePassengers.size() > 1000);
+
+My code works for all of these test cases. I included as many tests of each of the methods we were asked to program as I
+could think of and I beleive that in combination with the given tests it asserts my code runs well. I think the chance of
+having tests that my code does not pass is very small.

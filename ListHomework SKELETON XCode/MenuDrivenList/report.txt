@@ -1,0 +1,78 @@
+Nathaniel Thomas 506164479
+
+I didn't find any notable part to this programming project. It was extremely straightforward and half of the class/methods were already fully
+coded out for us. I think a proper exercise should include the student fully implementing this data structure as it should be an expectation of
+us after we complete this class. I encountered one bug in my program after programming all the functions for the first time which was an
+accidental overwrite of the elements in the list when calculating the size of the list. However, this issue was solved immediately and I
+probably spent a total of 15 minutes on this entire project which has the same number of points as our midterm.
+
+       // Create an empty list
+       cs32::List myList;
+
+       // Test isEmpty() for an empty list
+       assert(myList.isEmpty() == true);
+
+       // Add elements to the list
+       myList.addToFront("A");
+       myList.addToRear("B");
+       myList.addToFront("C");
+       myList.addToRear("D");
+       myList.addToFront("E");
+
+       // Test isEmpty() for a non-empty list
+       assert(myList.isEmpty() == false);
+
+       // Test size() should be 5
+       assert(myList.size() == 5);
+
+       // Test position() for most elements and one non-present element
+       assert(myList.position("A") == 2);
+       assert(myList.position("B") == 3);
+       assert(myList.position("E") == 0);
+       assert(myList.position("F") == -1);
+
+       // Test before() for true and false
+       assert(myList.before("C", "D") == true);
+       assert(myList.before("B", "A") == false);
+
+       // Test get() for 2 positions that are present and verify their correctness and 1 position that isn't present
+       string data;
+       assert(myList.get(0, data) == true);
+       assert(data == "E");
+       assert(myList.get(4, data) == true);
+       assert(data == "D");
+       assert(myList.get(5, data) == false);
+
+       // Test min() for the list
+       assert(myList.min() == "A");
+
+       // Test deleteItem() for the minimum and verify the change in list size as well as lack of deleted item position
+       myList.deleteItem("A");
+       assert(myList.size() == 4);
+       assert(myList.position("A") == -1);
+
+       // Test removeAllBiggerThan() for smallest element resulting in a list of one element
+       myList.removeAllBiggerThan("B");
+       assert(myList.size() == 1);
+       assert(myList.position("D") == -1);
+       assert(myList.position("C") == -1);
+       assert(myList.position("B") == 0);
+
+       // Test copy constructor and verify the elements are the same
+       cs32::List copyList(myList);
+       assert(copyList.size() == 1);
+       assert(copyList.position("D") == -1);
+       assert(copyList.position("C") == -1);
+       assert(copyList.position("B") == 0);
+
+       // Test assignment operator and verify the elements are the same
+       cs32::List assignList;
+       assignList = myList;
+       assert(assignList.size() == 1);
+       assert(assignList.position("D") == -1);
+       assert(assignList.position("C") == -1);
+       assert(assignList.position("B") == 0);
+
+My code works for all of these test cases. I included as many tests of each of the methods we were asked to program as I could think of and I
+beleive that in combination with the given tests it asserts my code runs well. I think the chance of having tests that my code does not pass is
+very small.
