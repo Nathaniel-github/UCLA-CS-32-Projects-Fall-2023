@@ -1,0 +1,162 @@
+Nathaniel Thomas 506164479
+
+I actually enjoyed programming this project. It was a nice excercise to write out all this code for a doubly
+linked list ourselves and I actually ran into errors where I had to use the debugger to piece together where
+I made my mistakes. I primarily ran into issues with nullptrs and edge cases to a lot of the methods we had
+to write for Deque. Since we could never assume where a nullptr would be or how many DequeNodes would be in
+the Deque if any at all it made for some tedious if statements to verify I was not making any bad accesses.
+I don't know why but most of my issues seemed to come into the limelight in the setNext method for DequeNode.
+This doesn't actually mean anything but I still found it to be an interesting observation.
+
+I implemented my deleteItem going from front to back and then deleting the first appearance of the item. I
+also only use the first appearance of an item going front to back. I decided to implement the printItems to
+be identical to the previous list project. Speaking of the previous list project I made it an effort to not
+use code from that project but I feel like this entire project would be trivial if anyone just opened that
+project up since half the challenge was being able to write these methods from scratch.
+
+After more rigorous testing I found bugs in my deleteItem/deleteFront/deleteRear methods and my operator=
+method. The delete methods were running into memory leaks because when performing a delete sometimes the
+prev or next of a certain node might be altered prior to deletion which makes it difficult to accomodate
+the delete and reassignment for the head or tail. I fixed this by creating a separate variable to keep track
+of the node I am trying to delete before messing with anything else. My operator= method had a bug in its
+logic in that I thought that the front method was returning a node not the data itself and was trying to walk
+said node which wasn't possible with a piece of data. I fixed this by changing the way the method itself
+worked to instead use get() to walk through the rhs and then make the assignments to the current object.
+
+    // Test 1: isEmpty()
+    Deque<int> emptyDeque;
+    assert(emptyDeque.isEmpty());
+
+    // Test 2: addToFront() and deleteFront()
+    Deque<int> deque1;
+    deque1.addToFront(5);
+    deque1.addToFront(10);
+    assert(!deque1.isEmpty());
+    assert(deque1.front() == 10);
+    deque1.deleteFront();
+    assert(deque1.front() == 5);
+
+    // Test 3: addToRear() and deleteRear()
+    Deque<int> deque2;
+    deque2.addToRear(15);
+    deque2.addToRear(20);
+    assert(!deque2.isEmpty());
+    assert(deque2.rear() == 20);
+    deque2.deleteRear();
+    assert(deque2.rear() == 15);
+
+    // Test 4: deleteItem()
+    Deque<int> deque3;
+    deque3.addToFront(5);
+    deque3.addToFront(10);
+    deque3.addToFront(15);
+    assert(deque3.deleteItem(10));
+    assert(deque3.front() == 15);
+
+    // Test 5: makeEmpty()
+    deque3.makeEmpty();
+    assert(deque3.isEmpty());
+
+    // Test 6: printItems()
+    Deque<int> deque4;
+    deque4.addToFront(5);
+    deque4.addToFront(10);
+    deque4.addToFront(15);
+    std::cout << deque4.printItems() << std::endl;
+
+    // Test 7: operator=()
+    Deque<int> deque5 = deque2;
+    assert(deque5.rear() == 15);
+
+    // Test 8: size()
+    assert(deque5.size() == 1);
+
+    // Test 9: get()
+    int data;
+    assert(deque5.get(0, data) && data == 15);
+    
+    // Test 1: deleteFront() and deleteRear() on an empty deque
+    Deque<int> emptyDeque2;
+    emptyDeque2.deleteFront();
+    emptyDeque2.deleteRear();
+
+    // Test 2: deleteItem() on an empty deque
+    assert(!emptyDeque2.deleteItem(42));
+
+    // Test 3: get() on an empty deque
+    int emptyDequeData;
+    assert(!emptyDeque2.get(0, emptyDequeData));
+
+    // Test 4: size() on an empty deque
+    assert(emptyDeque2.size() == 0);
+
+    // Test 5: addToFront(), addToRear(), and deleteItem() with one element
+    Deque<int> singleElementDeque;
+    singleElementDeque.addToFront(5);
+    assert(singleElementDeque.size() == 1);
+    assert(singleElementDeque.deleteItem(5));
+    assert(singleElementDeque.size() == 0);
+    
+    Garage garage1(3);
+    assert(!garage1.tossIn("Car"));
+    assert(garage1.size() == 1);
+    assert(!garage1.tossIn("Bicycle"));
+    assert(garage1.size() == 2);
+    assert(!garage1.tossIn("Motorcycle"));
+    assert(garage1.size() == 3);
+    assert(garage1.tossIn("Truck")); // Garage is full, should replace the oldest item
+
+    // Test 2: tossOut() and size()
+    assert(garage1.tossOut("Bicycle"));
+    assert(garage1.size() == 2);
+    assert(!garage1.tossOut("Bicycle")); // Not in the garage anymore
+
+    // Test 3: use() and size()
+    assert(garage1.use("Truck"));
+    assert(garage1.size() == 2);
+    assert(!garage1.use("Person")); // Person is not in the garage
+
+    // Test 4: find()
+    assert(garage1.find("Motorcycle"));
+
+    // Test 5: capacity()
+    assert(garage1.capacity() == 3);
+    
+    // Test 1: tossIn() and size() with capacity 0
+    Garage emptyCapacityGarage(0);
+    assert(!emptyCapacityGarage.tossIn("Car"));
+    assert(emptyCapacityGarage.size() == 0);
+
+    // Test 2: tossIn() with capacity 1
+    Garage singleCapacityGarage(1);
+    assert(!singleCapacityGarage.tossIn("Bicycle"));
+    assert(singleCapacityGarage.size() == 1);
+    assert(singleCapacityGarage.tossIn("Motorcycle")); // Replace the oldest item
+    assert(singleCapacityGarage.size() == 1);
+
+    // Test 3: tossOut() with an empty garage
+    assert(!emptyCapacityGarage.tossOut("Car"));
+
+    // Test 4: use() with an empty garage
+    assert(!emptyCapacityGarage.use("Car"));
+
+    // Test 5: find() with an empty garage
+    assert(!emptyCapacityGarage.find("Car"));
+
+    // Test 6: capacity() and size() with a non-empty garage
+    assert(singleCapacityGarage.capacity() == 1);
+    assert(singleCapacityGarage.size() == 1);
+    
+    // Test the operator= method
+    Deque<int> d1;
+    d1.addToRear(10);
+    d1.addToRear(20);
+    Deque<int> d2;
+    d2 = d1;
+    assert(d2.size() == 2);
+    assert(d2.front() == 10);
+    assert(d2.rear() == 20);
+
+My code works for all of these test cases. I included as many tests of each of the methods we were asked to
+program as I could think of and I beleive that in combination with the given tests it asserts my code runs
+well. I think the chance of having tests that my code does not pass is very small.

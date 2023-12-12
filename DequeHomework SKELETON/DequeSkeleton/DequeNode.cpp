@@ -10,10 +10,12 @@ namespace cs32 {
 template <typename Type>
 DequeNode<Type>::DequeNode( const Type& v,
                       DequeNode * node,
-                      DequeNode * pre): value(v), previous(pre), next(node)
+                      DequeNode * pre): value(v), next(node), previous(pre)
 {
     
 }
+
+// Simple getters and setters
 
 template <typename Type>
 Type DequeNode<Type>::getElement() const {

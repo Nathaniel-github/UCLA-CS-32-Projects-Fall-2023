@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -34,6 +34,7 @@
 		89F4BB8A18B58A11009CFF51 /* Deque.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Deque.cpp; sourceTree = "<group>"; };
 		89F4BB8B18B58A11009CFF51 /* Deque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deque.h; sourceTree = "<group>"; };
 		89F4BB8D18B58A11009CFF51 /* DequeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DequeNode.h; sourceTree = "<group>"; };
+		CC0904A22B18442D00114C43 /* report.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = report.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +67,7 @@
 		89F4BB7E18B589EE009CFF51 /* DequeSkeleton */ = {
 			isa = PBXGroup;
 			children = (
+				CC0904A22B18442D00114C43 /* report.txt */,
 				89F4BB8818B58A11009CFF51 /* main.cpp */,
 				89F4BB8918B58A11009CFF51 /* DequeNode.cpp */,
 				89F4BB8D18B58A11009CFF51 /* DequeNode.h */,
